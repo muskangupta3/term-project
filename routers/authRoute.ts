@@ -1,9 +1,10 @@
 import express from "express";
 import passport from "../middleware/passport";
 const router = express.Router();
+const devMode = process.env.MODE === "dev"
 
 router.get("/login", async (req, res) => {
-  res.render("login");
+  res.render("login",{devMode});
 });
 
 router.post(
