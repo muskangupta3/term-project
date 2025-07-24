@@ -5,6 +5,16 @@ const PORT = process.env.PORT || 8000;
 
 const app = express();
 
+declare global {
+  namespace Express {
+        interface User {
+          uname:string,
+          password:string,
+          id:string
+        }
+    }
+  }
+
 app.set("trust proxy", 1);
 app.set("view engine", "ejs");
 app.use(express.static("public"));

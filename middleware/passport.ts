@@ -5,14 +5,14 @@ import {
   getUserById,
 } from "../controller/userController";
 
-// ⭐ TODO: Passport Types
+// ⭐ DONE TODO: Passport Types
 const localLogin = new LocalStrategy(
   {
     usernameField: "uname",
     passwordField: "password",
   },
-  async (uname: any, password: any, done: any) => {
-    // Check if user exists in databse
+  async (uname: string, password: string,done:any) => {
+    // Check if user exists in database
     const user = await getUserByEmailIdAndPassword(uname, password);
     // console.log('passport 13: '+ user.uname);
     return user
@@ -23,15 +23,15 @@ const localLogin = new LocalStrategy(
   }
 );
 
-// ⭐ TODO: Passport Types
-passport.serializeUser(function (user: any, done: any) {
+// ⭐ DONE TODO: Passport Types
+passport.serializeUser(function (user: Express.User, done: (err: any, id?: string) => void)  {
   console.log("serialize: " + user.id);
   done(null, user.id);
 });
 
-// ⭐ TODO: Passport Types
-passport.deserializeUser(function (id: any, done: any) {
-  const user = getUserById(id);
+// ⭐ DONE TODO: Passport Types
+passport.deserializeUser(async function (id: string, done: (err: any, user?: Express.User | false | null) => void) {
+  const user = await getUserById(id);
   if (user) {
     done(null, user);
   } else {
