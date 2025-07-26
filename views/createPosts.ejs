@@ -9,15 +9,32 @@
       href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.classless.min.css"
     />
     <link href="/css/style.css" rel="stylesheet" />
-    <title>CreatePost</title>
+    <title><%= post ? "Edit Post" : "Create Post" %></title>
   </head>
   <body>
     <main>
       <div class="authOptions">
-        <h1>Create Post</h1>
-        <a role="button" href="/posts">Home</a>
+        <h1><%= post ? "Edit Post" : "Create Post" %></h1>
+        <a role="button" href="/posts">← Home</a>
       </div>
-      <p>Implement this yourself. It comes from createPost.ejs</p>
+      <form action="<%= post ? '/posts/edit/' + post.id : '/posts/create' %>" method="POST">
+        
+        <label for="title">Title</label>
+        <input type="text" id="title" name="title" placeholder="Enter post title" value="<%= post ? post.title : '' %>" required/>
+
+        <label for="link">Link (optional)</label>
+        <input type="url" id="link" name="link" placeholder="https://example.com" value="<%= post ? post.link : '' %>" />
+
+        <label for="description">Description</label>
+        <textarea id="description" name="description" rows="5" placeholder="Write something about your post..." required>
+          <%= post ? post.description : '' %>
+        </textarea>
+        
+        <label for="subgroup">Subgroup</label>
+        <input type="text" id="subgroup" name="subgroup" placeholder="e.g., food, coding" value="<%= post ? post.subgroup : '' %>" required />
+
+        <button type="submit"><%= post ? "Update Post" : "Post" %></button>
+      </form>
     </main>
   </body>
 </html>

@@ -17,9 +17,58 @@
         <h1>View Post</h1>
         <a role="button" href="/posts">Home</a>
       </div>
-      <div>
-        <p>Implement this page yourself. It is from individualPost.ejs</p>
-      </div>
+      <section>
+        <h2><%= post.title %></h2>
+        <% if (post.link) { %>
+          <p><strong>Link:</strong> <a href="<%= post.link %>" target="_blank"><%= post.link %></a></p>
+        <% } %>
+
+        <p><strong>Posted by:</strong> <%= user?.uname %></p>
+        <p><strong>Posted at:</strong> <%= post.timestamp %></p>
+      </section>
+        <% if (user && post.creator.id === user?.id) { %>
+        <a role="button" href="/posts/edit/<%= post.id %>">Edit</a>
+        <% } %>
+      <hr />
+     <section>
+        <h3>Comments</h3>
+        <% if (post.comments.length === 0) { %>
+          <p>No comments yet.</p>
+        <% } else { %>
+          <ul>
+            <% post.comments.forEach(comment => { %>
+              <li>
+                <p><%= comment.description %></p>
+                <small>
+                  — <%= user?.uname %>,
+                  <%= comment.timestamp %>
+                  <% if (user && comment.creator === user?.id) { %>
+                    | <a href="/comments/<%= comment.id %>/delete">Delete</a>
+                  <% } %>
+                </small>
+              </li>
+            <% }); %>
+          </ul>
+        <% } %>
+      </section> 
+      <hr />
+      <% if (user) { %>
+        <section>
+          <h3>Add a Comment</h3>
+          <form action="/posts/comment-create/<%= post.id %>" method="POST">
+            <input type="hidden" name="postId" value="<%= post.id %>" />
+            <label for="description">Comment</label>
+            <textarea
+              name="description"
+              id="description"
+              rows="3"
+              placeholder="Write your comment here..."
+              required
+            ></textarea>
+            <button type="submit">Submit</button>
+          </form>
+        </section>
+      <% } %>
     </main>
   </body>
 </html>
