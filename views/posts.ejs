@@ -52,6 +52,32 @@
             </div>
 
             <p><%= post.description %></p>
+
+            <% if (user) { %>
+              <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <form action="/vote/<%= post.id %>" method="POST" style="display:inline;">
+                  <input type="hidden" name="value" value="1" />
+                  <button
+                    type="submit"
+                    style="padding: 0.3rem 0.6rem;"
+                    class="<%= post.votes?.some(v => v.user_id === user.id && v.value === 1) ? 'active-vote' : '' %>"
+                  >
+                    +
+                  </button>
+                </form>
+
+                <form action="/vote/<%= post.id %>" method="POST" style="display:inline;">
+                  <input type="hidden" name="value" value="-1" />
+                  <button
+                    type="submit"
+                    style="padding: 0.3rem 0.7rem;"
+                    class="<%= post.votes?.some(v => v.user_id === user.id && v.value === -1) ? 'active-vote' : '' %>"
+                  >
+                    -
+                  </button>
+                </form>
+              </div>
+            <% } %>
           </div>
         <% }) %>
       </div>
@@ -66,5 +92,13 @@
         </div>
       <% } %>
     </main>
+
+    <style>
+      .active-vote {
+        background-color: #007f5f;
+        color: white;
+        font-weight: bold;
+      }
+    </style>
   </body>
 </html>

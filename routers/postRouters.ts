@@ -24,9 +24,14 @@ router.post("/create", ensureAuthenticated, async (req, res) => {
 
 router.get("/show/:postid",ensureAuthenticated, async (req, res) => {
   // ⭐ DONE TODO
-    const user = await req.user;
-    const post = await getPost(req.params.postid);
-    res.render("individualPost",{post,user});
+  const user = await req.user;
+  const post = await getPost(req.params.postid);
+  const vote = {
+      upVotes: post.votes.filter(v => v.value == 1).length,
+      downVotes :post.votes.filter(v => v.value < 0).length,
+      userVote :post.votes.find(v => v.user_id === user.id)?.value || 0
+    }
+  res.render("individualPost",{post,user,vote});
 });
 
 router.get("/edit/:postid", ensureAuthenticated, async (req, res) => {
@@ -54,9 +59,10 @@ router.get("/deleteconfirm/:postid", ensureAuthenticated, async (req, res) => {
 });
 
 router.post("/delete/:postid", ensureAuthenticated, async (req, res) => {
-  // ⭐ TODO
+  // ⭐ DONE TODO
+  const post = await getPost(req.params.postid);
   await deletePost(req.params.postid);
-  res.redirect('/posts')
+  res.redirect('/subs/show/subgroup')
 });
 
 router.post("/comment-create/:postid", ensureAuthenticated, async (req, res) => {

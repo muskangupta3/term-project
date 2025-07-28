@@ -17,9 +17,21 @@
         <h1>Sub Groups</h1>
         <a role="button" href="/posts">Home</a>
       </div>
-      <div>
-        <p>Implement this page yourself. It is from subs.ejs</p>
-      </div>
+
+      <% if (subs.length > 0) { %>
+        <ul>
+          <% subs?.sort((a, b) => a.localeCompare(b)).forEach(sub => { %>
+            <li>
+              <a href="/subs/show/<%= sub %>">
+                <strong><%= sub %></strong> 
+                (<%= sub.postCount %> post<%= sub.postCount > 1 ? 's' : '' %>)
+              </a>
+            </li>
+          <% }) %>
+        </ul>
+      <% } else { %>
+        <p>No sub groups with posts found.</p>
+      <% } %>
     </main>
   </body>
 </html>

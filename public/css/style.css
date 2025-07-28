@@ -3,3 +3,54 @@
   justify-content: space-between;
   align-items: flex-start;
 }
+.vote-container {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vote-form {
+  margin: 0;
+}
+
+.vote-button {
+  width: 40px;
+  height: 40px;
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #e0e0e0;
+  color: #333;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background-color 0.2s ease;
+  vertical-align: middle;
+}
+
+.vote-button:hover {
+  background-color: #ccc;
+}
+
+.vote-button.active-vote {
+  background-color: #0275d8;
+  color: white;
+}
+
+.vote-count {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1c1c1c;
+  text-align: center;
+  min-width: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px; /* same as button height */
+  line-height: 1;
+  position: relative;
+  top: -9px;
+}

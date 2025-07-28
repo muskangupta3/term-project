@@ -20,17 +20,45 @@
       <section>
         <h2><%= post.title %></h2>
         <% if (post.link) { %>
-          <p><strong>Link:</strong> <a href="<%= post.link %>" target="_blank"><%= post.link %></a></p>
+          <p><strong>Link:</strong> 
+            <a href="<%= post.link %>" target="_blank"><%= post.link %></a>
+          </p>
         <% } %>
 
-        <p><strong>Posted by:</strong> <%= user?.uname %></p>
-        <p><strong>Posted at:</strong> <%= post.timestamp %></p>
+        <p><strong>Posted by:</strong> <%= post.creator?.uname %></p>
+        <p><strong>Posted at:</strong> <%= new Date(post.timestamp).toLocaleDateString() %></p>
+
+        <!-- VOTING SECTION -->
+        <div class="vote-container">
+          <% if (user) { %>
+            <form action="/posts/vote/<%= post.id %>" method="POST" class="vote-form">
+              <input type="hidden" name="voteType" value="1" />
+              <button type="submit" class="vote-button <%= vote.userVote == 1 ? 'active-vote' : '' %>">+</button>
+            </form>
+
+            <div class="vote-count-wrapper">
+              <span class="vote-count"><%= vote.upVotes %></span>
+            </div>
+
+            <form action="/posts/vote/<%= post.id %>" method="POST" class="vote-form">
+              <input type="hidden" name="voteType" value="-1" />
+              <button type="submit" class="vote-button <%= vote.userVote < 0 ? 'active-vote' : '' %>">−</button>
+            </form>
+
+            <div class="vote-count-wrapper">
+              <span class="vote-count"><%= vote.downVotes %></span>
+            </div>
+          <% } %>
+        </div>
+
       </section>
-        <% if (user && post.creator.id === user?.id) { %>
+      <% if (user && post.creator.id === user?.id) { %>
         <a role="button" href="/posts/edit/<%= post.id %>">Edit</a>
-        <% } %>
+      <% } %>
       <hr />
-     <section>
+
+      <!-- COMMENTS SECTION -->
+      <section>
         <h3>Comments</h3>
         <% if (post.comments.length === 0) { %>
           <p>No comments yet.</p>
@@ -40,8 +68,8 @@
               <li>
                 <p><%= comment.description %></p>
                 <small>
-                  — <%= user?.uname %>,
-                  <%= comment.timestamp %>
+                  — <%= comment.creator?.uname %>,
+                  <%= new Date(comment.timestamp).toLocaleDateString() %>
                   <% if (user && comment.creator === user?.id) { %>
                     | <a href="/comments/<%= comment.id %>/delete">Delete</a>
                   <% } %>
@@ -50,8 +78,10 @@
             <% }); %>
           </ul>
         <% } %>
-      </section> 
+      </section>
       <hr />
+
+      <!-- COMMENT FORM -->
       <% if (user) { %>
         <section>
           <h3>Add a Comment</h3>

@@ -49,7 +49,7 @@ const comments = {
   9001: {
     id: 9001,
     post_id: 102,
-    creator: 1,
+    creator: 3,
     description: "Actually I learned a lot :pepega:",
     timestamp: 1642691742010,
   },
@@ -57,9 +57,9 @@ const comments = {
 
 const votes = [
   { user_id: 2, post_id: 101, value: +1 },
-  { user_id: 3, post_id: 101, value: +1 },
+  { user_id: 1, post_id: 101, value: +1 },
   { user_id: 4, post_id: 101, value: +1 },
-  { user_id: 3, post_id: 102, value: -1 },
+  { user_id: 2, post_id: 102, value: -1 },
 ];
 
 function debug() {
@@ -101,7 +101,7 @@ function decoratePost(post) {
  * @param {*} n how many posts to get, defaults to 5
  * @param {*} sub which sub to fetch, defaults to all subs
  */
-function getPosts(n = 5, sub = undefined) {
+function getPosts(n = 5, sub :string) {
   let allPosts = Object.values(posts);
   if (sub) {
     allPosts = allPosts.filter((post) => post.subgroup === sub);
