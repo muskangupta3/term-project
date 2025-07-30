@@ -25,10 +25,10 @@
           </p>
         <% } %>
 
-        <p><strong>Posted by:</strong> <%= post.creator?.uname %></p>
+        <p><strong>Posted by:</strong> <%= post.user?.uname %></p>
         <p><strong>Posted at:</strong> <%= new Date(post.timestamp).toLocaleDateString() %></p>
 
-        <!-- VOTING SECTION -->
+                  <!-- VOTING SECTION -->
         <div class="vote-container">
           <% if (user) { %>
             <form action="/posts/vote/<%= post.id %>" method="POST" class="vote-form">
@@ -41,8 +41,8 @@
             </div>
 
             <form action="/posts/vote/<%= post.id %>" method="POST" class="vote-form">
-              <input type="hidden" name="voteType" value="-1" />
-              <button type="submit" class="vote-button <%= vote.userVote < 0 ? 'active-vote' : '' %>">−</button>
+              <input type="hidden" name="voteType" value="0" />
+              <button type="submit" class="vote-button <%= vote.userVote == 0 ? 'active-vote' : '' %>">−</button>
             </form>
 
             <div class="vote-count-wrapper">
@@ -52,7 +52,7 @@
         </div>
 
       </section>
-      <% if (user && post.creator.id === user?.id) { %>
+      <% if (user && post.user.id === user?.id) { %>
         <a role="button" href="/posts/edit/<%= post.id %>">Edit</a>
       <% } %>
       <hr />
@@ -68,10 +68,10 @@
               <li>
                 <p><%= comment.description %></p>
                 <small>
-                  — <%= comment.creator?.uname %>,
+                  — <%= comment.user?.uname %>,
                   <%= new Date(comment.timestamp).toLocaleDateString() %>
                   <% if (user && comment.creator === user?.id) { %>
-                    | <a href="/comments/<%= comment.id %>/delete">Delete</a>
+                    | <a href="/posts/comment-delete/<%= post.id %>/<%= comment.id %>">Delete</a>
                   <% } %>
                 </small>
               </li>

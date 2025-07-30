@@ -5,11 +5,11 @@
   "main": "app.js",
   "scripts": {
     "dev": "tsx app.ts",
-   "start": "tsx watch --env-file .env app.ts"
+    "start": "tsx watch --env-file .env app.ts"
   },
   "license": "MIT",
   "dependencies": {
-    "@prisma/client": "^4.11.0",
+    "@prisma/client": "^6.12.0",
     "body-parser": "^1.20.1",
     "cookie-parser": "^1.4.6",
     "cookie-session": "^2.0.0",
@@ -25,7 +25,7 @@
     "@types/node": "^18.15.3",
     "@types/passport": "^1.0.14",
     "@types/passport-local": "^1.0.37",
-    "prisma": "^4.16.2",
+    "prisma": "^6.12.0",
     "tsx": "^4.20.3",
     "typescript": "^5.0.2"
   }
