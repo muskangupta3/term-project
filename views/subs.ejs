@@ -20,11 +20,10 @@
 
       <% if (subs.length > 0) { %>
         <ul>
-          <% subs?.sort((a, b) => a.localeCompare(b)).forEach(sub => { %>
+          <% subs.sort((a, b) => a.name.localeCompare(b.name)).forEach(sub => {%>
             <li>
-              <a href="/subs/show/<%= sub %>">
-                <strong><%= sub %></strong> 
-                (<%= sub.postCount %> post<%= sub.postCount > 1 ? 's' : '' %>)
+              <a href="/subs/show/<%= sub.name %>">
+                <strong><%= sub.name %></strong> 
               </a>
             </li>
           <% }) %>

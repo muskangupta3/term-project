@@ -21,6 +21,7 @@ model Post {
   user   User     @relation(fields: [creator], references: [id])
   comments    Comment[] 
   votes       Votes[]
+  sub Subgroup @relation(fields: [subgroup], references: [name])
 }
 
 model User{
@@ -51,3 +52,7 @@ model Votes{
   post Post @relation(fields: [post_id], references: [id])
 }
 
+model Subgroup{
+  name String @id
+  posts Post[]
+}

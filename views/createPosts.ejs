@@ -29,7 +29,7 @@
         <textarea id="description" name="description" rows="5" placeholder="Write something about your post..." required><%= post ? post.description.trim() : '' %></textarea>
 
         <label for="subgroup">Subgroup</label>
-        <input type="text" id="subgroup" name="subgroup" placeholder="e.g., food, coding" value="<%= post ? post.subgroup : '' %>" required />
+        <input type="text" id="subgroup" name="subgroup" placeholder="e.g., food, coding" value="<%= post ? post.subgroup.toLowerCase() : '' %>" required />
 
         <button type="submit"><%= post ? "Update Post" : "Post" %></button>
       </form>
