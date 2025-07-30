@@ -1,16 +1,19 @@
-// @ts-nocheck
+
 import express, { Request, Response } from "express";
 import * as database from "../controller/postController";
 const router = express.Router();
 import { ensureAuthenticated } from "../middleware/checkAuth";
-import { addPost,getPost,addComment,editPost,deletePost } from '../fake-db';
 import { PrismaClient } from "@prisma/client";
 
 const db = new PrismaClient();
 
 router.get("/", async (req, res) => {
- // const posts = await database.getPosts(20);
-  const posts = await db.post.findMany({take : 10});
+  const posts = await db.post.findMany({
+    take : 10,
+    include: { 
+      votes: true, 
+    }
+  });
   const user = await req.user;
   res.render("posts", { posts, user });
 });
@@ -23,51 +26,41 @@ router.post("/create", ensureAuthenticated, async (req, res) => {
   // ⭐ DONE TODO
   const data = req.body;
   data.creator = req.user?.id;
+  const existingSubgroup = await db.subgroup.findUnique({ where: { name: data.subgroup } });
+  if (!existingSubgroup) {
+    await db.subgroup.create({ data: { name: data.subgroup } });
+  }
   const createPost = await db.post.create({data});
-  //await addPost(postContent.title,postContent.link,req.user.id,postContent.description,postContent.subgroup);
   res.redirect('/posts')
 });
 
 router.get("/show/:postid",ensureAuthenticated, async (req, res) => {
   // ⭐ DONE TODO
-  const user = await req.user;
-  //const post = await getPost(req.params.postid);
-  // const post = await decoratePost(req.params.postid);
-  // const vote = {
-  //     upVotes: post?.votes.filter((v: { value: number; }) => v.value == 1).length,
-  //     downVotes :post?.votes.filter(v => v.value == 0).length,
-  //     userVote :post?.votes.find(v => v.user_id === user.id)?.value
-  //   }
-  // res.render("individualPost",{post,user,vote});
   await renderIndividualPostPage(req,res)
 });
 
 router.get("/edit/:postid", ensureAuthenticated, async (req, res) => {
   // ⭐DONE TODO
   const user = await req.user;
-  const post = await decoratePost(req.params.postid);
+  const post = await decoratePost(Number(req.params.postid));
   res.render("createPosts",{post});
 });
 
 router.post("/edit/:postid", ensureAuthenticated, async (req, res) => {
   // ⭐DONE TODO
-  //await editPost(req.params.postid,editPostContent);
   const editPost = await db.post.update({
     where: {
       id : Number(req.params.postid)
     },
     data: req.body
   })  
-  const user = await req.user;
   await renderIndividualPostPage(req,res);
-  // const post = await decoratePost(req.params.postid);
-  // res.render("individualPost",{post,user});
 });
 
 router.get("/deleteconfirm/:postid", ensureAuthenticated, async (req, res) => {
   // ⭐DONE TODO
   const user = await req.user;
-  const post = await decoratePost(req.params.postid);
+  const post = await decoratePost(Number(req.params.postid));
   res.render("deleteConfirm",{post,user});
 });
 
@@ -78,22 +71,18 @@ router.post("/delete/:postid", ensureAuthenticated, async (req, res) => {
       id:Number(req.params.postid)
     }
   })
-  //await deletePost(req.params.postid);
   res.redirect(`/subs/show/${deletePost.subgroup}`)
 });
 
 router.post("/comment-create/:postid", ensureAuthenticated, async (req, res) => {
     // ⭐ DONE TODO
     const user = await req.user;
-    // await addComment(commentContent.postId,user.id,commentContent.description);
     const commentContent = {
-      post_id : Number(req.body.postId),
+      post_id : Number(req.params.postid),
       description : req.body.description,
-      creator:user.id
+      creator:user?.id
     }
-    const comment = await db.comment.create({data:commentContent});
-    // const post = await decoratePost(req.params.postid);
-    // res.render("individualPost",{post,user});
+    await db.comment.create({data:commentContent});
     await renderIndividualPostPage(req,res)
   }
 );
@@ -104,9 +93,6 @@ router.get("/comment-delete/:postid/:commentid", ensureAuthenticated, async (req
       id:Number(req.params.commentid)
     }
   })
-  //const post = await decoratePost(deleteComment.post_id);
-  const user = await req.user;
-  //res.render("individualPost",{post,user});
   await renderIndividualPostPage(req,res)
 });
 
@@ -115,7 +101,7 @@ router.post("/vote/:postid", ensureAuthenticated, async (req, res) => {
   const postId = Number(req.params.postid);
   const postContent = await decoratePost(postId);
 
-  const existingVote = postContent.votes.find(v => v.user_id === user.id);
+  const existingVote = postContent?.votes.find(v => v.user_id === Number(user?.id));
   const newVote = Number(req.body.voteType);
 
   if(existingVote?.value === newVote){
@@ -128,13 +114,13 @@ router.post("/vote/:postid", ensureAuthenticated, async (req, res) => {
   else if(existingVote == undefined){
     await db.votes.create({
       data :{
-        user_id:user?.id,
+        user_id:Number(user?.id),
         post_id:postId,
         value: newVote
       }
     })
   }
-  else if(existingVote != newVote){
+  else if(existingVote?.value != newVote){
     await db.votes.update({
       where :{
         votesId : existingVote?.votesId
@@ -144,20 +130,11 @@ router.post("/vote/:postid", ensureAuthenticated, async (req, res) => {
       }
     })
   }
-  // const post = await decoratePost(postId);
-  // const vote = {
-  //   upVotes: post.votes.filter(v => v.value == 1).length,
-  //   downVotes: post.votes.filter(v => v.value == 0).length,
-  //   userVote: post.votes.find(v => v.user_id === user.id)?.value
-  // };
-
   await renderIndividualPostPage(req,res);
- 
-  //res.render("individualPost", { post, user, vote });
 });
 
 
-async function decoratePost(postId){
+async function decoratePost(postId:number){
   var post = await db.post.findFirst({
     where:{id:Number(postId)},
     include: { 
@@ -171,13 +148,13 @@ async function decoratePost(postId){
   return post;
 }
 
-async function renderIndividualPostPage(req,res){
+async function renderIndividualPostPage(req:Request,res:Response){
   const post = await decoratePost(Number(req.params.postid));
   const user = await req.user;
   const vote = {
-    upVotes: post.votes.filter(v => v.value == 1).length,
-    downVotes: post.votes.filter(v => v.value == 0).length,
-    userVote: post.votes.find(v => v.user_id === user.id)?.value
+    upVotes: post?.votes.filter(v => v.value == 1).length,
+    downVotes: post?.votes.filter(v => v.value == 0).length,
+    userVote: post?.votes.find(v => v.user_id === Number(user?.id))?.value
   };
  
   res.render("individualPost", { post, user, vote });
