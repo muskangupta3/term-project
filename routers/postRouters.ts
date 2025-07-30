@@ -1,6 +1,4 @@
-
 import express, { Request, Response } from "express";
-import * as database from "../controller/postController";
 const router = express.Router();
 import { ensureAuthenticated } from "../middleware/checkAuth";
 import { PrismaClient } from "@prisma/client";
@@ -14,8 +12,15 @@ router.get("/", async (req, res) => {
       votes: true, 
     }
   });
+
+  const postsWithVoteCounts = posts.map(post => {
+    const upvotes = post.votes.filter(v => v.value === 1).length;
+    const downvotes = post.votes.filter(v => v.value === 0).length;
+    return { ...post, upvotes, downvotes };
+  });
+
   const user = await req.user;
-  res.render("posts", { posts, user });
+  res.render("posts", { posts: postsWithVoteCounts, user });
 });
 
 router.get("/create", ensureAuthenticated, (req, res) => {
@@ -80,7 +85,7 @@ router.post("/comment-create/:postid", ensureAuthenticated, async (req, res) => 
     const commentContent = {
       post_id : Number(req.params.postid),
       description : req.body.description,
-      creator:user?.id
+      creator:Number(user?.id)
     }
     await db.comment.create({data:commentContent});
     await renderIndividualPostPage(req,res)

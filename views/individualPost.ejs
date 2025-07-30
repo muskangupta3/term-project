@@ -33,7 +33,7 @@
           <% if (user) { %>
             <form action="/posts/vote/<%= post.id %>" method="POST" class="vote-form">
               <input type="hidden" name="voteType" value="1" />
-              <button type="submit" class="vote-button <%= vote.userVote == 1 ? 'active-vote' : '' %>">+</button>
+              <button type="submit" class="vote-button <%= vote.userVote == 1 ? 'active-vote' : '' %>">👍 </button>
             </form>
 
             <div class="vote-count-wrapper">
@@ -42,7 +42,7 @@
 
             <form action="/posts/vote/<%= post.id %>" method="POST" class="vote-form">
               <input type="hidden" name="voteType" value="0" />
-              <button type="submit" class="vote-button <%= vote.userVote == 0 ? 'active-vote' : '' %>">−</button>
+              <button type="submit" class="vote-button <%= vote.userVote == 0 ? 'active-vote' : '' %>">👎 </button>
             </form>
 
             <div class="vote-count-wrapper">

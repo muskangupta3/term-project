@@ -16,9 +16,9 @@
       <div class="authOptions">
         <h1>Homepage</h1>
         <% if (!user) { %>
-          <a role="button" href="/auth/login">Login</a>
+        <a role="button" href="/auth/login">Login</a>
         <% } else { %>
-          <a role="button" href="/auth/logout">Logout</a>
+        <a role="button" href="/auth/logout">Logout</a>
         <% } %>
       </div>
 
@@ -27,58 +27,48 @@
       <div>
         <p>All Posts</p>
         <% posts.forEach(post => { %>
-          <div class="individualPost" style="border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <a href="/posts/show/<%= post.id %>"><strong><%= post.title %></strong></a>
+        <div
+          class="individualPost"
+          style="border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem"
+        >
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <a href="/posts/show/<%= post.id %>"
+              ><strong><%= post.title %></strong></a
+            >
 
-              <% if (user && post.creator === user?.id) { %>
-                <a
-                  href="/posts/deleteconfirm/<%= post.id %>"
-                  style="
-                    padding: 0.25rem 0.6rem;
+            <% if (user && post.creator === user?.id) { %>
+            <a href="/posts/deleteconfirm/<%= post.id %>" style=" padding: 0.25rem 0.6rem;
                     font-size: 0.8rem;
                     background-color: #ffdddd;
                     color: #a00;
                     border: 1px solid #a00;
                     border-radius: 4px;
                     text-decoration: none;
-                    cursor: pointer;
-                  "
-                  title="Delete Post"
-                >
-                  Delete
-                </a>
-              <% } %>
-            </div>
-
-            <p><%= post.description %></p>
-
-            <% if (user) { %>
-              <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <form action="/vote/<%= post.id %>" method="POST" style="display:inline;">
-                  <input type="hidden" name="value" value="1" />
-                  <button
-                    type="submit"
-                    style="padding: 0.3rem 0.6rem;"
-                    class="<%= post.votes?.some(v => v.user_id === user.id && v.value === 1) ? 'active-vote' : '' %>"
-                  >
-                    +
-                  </button>
-                </form>
-
-                <form action="/vote/<%= post.id %>" method="POST" style="display:inline;">
-                  <input type="hidden" name="value" value="-1" />
-                  <button
-                    type="submit"
-                    style="padding: 0.3rem 0.7rem;"
-                    class="<%= post.votes?.some(v => v.user_id === user.id && v.value === -1) ? 'active-vote' : '' %>"
-                  >
-                    -
-                  </button>
-                </form>
-              </div>
+                    cursor: pointer;">Delete</a>
             <% } %>
           </div>
+
+          <p><%= post.description %></p>
+
+          <div style="margin-top: 0.5rem">
+            <small
+              >👍 <%= post.upvotes || 0 %> &nbsp;&nbsp; 👎 <%= post.downvotes ||
+              0 %></small
+            >
+          </div>
+
+          <% if (user) { %>
+          <div style="display: flex; align-items: center; gap: 0.5rem">
+            <!-- voting forms -->
+          </div>
+          <% } %>
+        </div>
         <% }) %>
       </div>
 
@@ -87,9 +77,9 @@
       </div>
 
       <% if (user) { %>
-        <div>
-          <a role="button" href="/posts/create">Create Post</a>
-        </div>
+      <div>
+        <a role="button" href="/posts/create">Create Post</a>
+      </div>
       <% } %>
     </main>
 

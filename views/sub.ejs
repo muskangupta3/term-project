@@ -18,43 +18,37 @@
         <a role="button" href="/posts">Home</a>
       </div>
 
-      <% if (posts.length > 0) { %>
-        <% posts.forEach(post => { %>
-          <div class="individualPost" style="border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <a href="/posts/show/<%= post.id %>"><strong><%= post.title %></strong></a>
-            </div>
-            <p><%= post.description %></p>
+      <% if (posts.length > 0) { %> <% posts.forEach(post => { %>
+      <div
+        class="individualPost"
+        style="border: 1px solid #ddd; padding: 1rem; margin-bottom: 1rem"
+      >
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          "
+        >
+          <a href="/posts/show/<%= post.id %>"
+            ><strong><%= post.title %></strong></a
+          >
+        </div>
+        <p><%= post.description %></p>
 
-            <% if (user) { %>
-              <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <form action="/vote/<%= post.id %>" method="POST" style="display:inline;">
-                  <input type="hidden" name="value" value="1" />
-                  <button
-                    type="submit"
-                    style="padding: 0.3rem 0.6rem;"
-                    class="<%= post.votes?.some(v => v.user_id === user.id && v.value === 1) ? 'active-vote' : '' %>"
-                  >
-                    +
-                  </button>
-                </form>
-
-                <form action="/vote/<%= post.id %>" method="POST" style="display:inline;">
-                  <input type="hidden" name="value" value="-1" />
-                  <button
-                    type="submit"
-                    style="padding: 0.3rem 0.7rem;"
-                    class="<%= post.votes?.some(v => v.user_id === user.id && v.value === -1) ? 'active-vote' : '' %>"
-                  >
-                    -
-                  </button>
-                </form>
-              </div>
-            <% } %>
+        <% if (user) { %>
+        <div style="display: flex; align-items: center; gap: 0.5rem">
+          <div style="margin-top: 0.5rem">
+            <small
+              >👍 <%= post.upvotes || 0 %> &nbsp;&nbsp; 👎 <%= post.downvotes ||
+              0 %></small
+            >
           </div>
-        <% }) %>
-      <% } else { %>
-        <p>No posts found in this sub.</p>
+        </div>
+        <% } %>
+      </div>
+      <% }) %> <% } else { %>
+      <p>No posts found in this sub.</p>
       <% } %>
     </main>
 
