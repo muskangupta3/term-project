@@ -12,24 +12,24 @@
     <title>Subs</title>
   </head>
   <body>
-    <main>
+    <main class="subs-page">
       <div class="authOptions">
         <h1>Sub Groups</h1>
         <a role="button" href="/posts">Home</a>
       </div>
 
       <% if (subs.length > 0) { %>
-        <ul>
-          <% subs.sort((a, b) => a.name.localeCompare(b.name)).forEach(sub => {%>
-            <li>
-              <a href="/subs/show/<%= sub.name %>">
-                <strong><%= sub.name %></strong> 
-              </a>
-            </li>
-          <% }) %>
-        </ul>
+      <ul>
+        <% subs.sort((a, b) => a.name.localeCompare(b.name)).forEach(sub => {%>
+        <li>
+          <a href="/subs/show/<%= sub.name %>">
+            <strong><%= sub.name.toUpperCase() %></strong>
+          </a>
+        </li>
+        <% }) %>
+      </ul>
       <% } else { %>
-        <p>No sub groups with posts found.</p>
+      <p>No sub groups with posts found.</p>
       <% } %>
     </main>
   </body>

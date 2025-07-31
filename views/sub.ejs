@@ -34,7 +34,8 @@
             ><strong><%= post.title %></strong></a
           >
         </div>
-        <p><%= post.description %></p>
+        <p class="post-description"><%= post.description %></p>
+        <small>Created by :<%= post.user.uname %></small>
         <div class="vote-container">
           <% if (user) { %>
           <form
@@ -47,12 +48,12 @@
               type="submit"
               class="vote-button <%= post.userVote == 1 ? 'active-vote' : '' %>"
             >
-              👍
+              +
             </button>
           </form>
 
           <div class="vote-count-wrapper">
-            <span class="vote-count"><%= post.upvotes %></span>
+            <span class="vote-count"><%= post.upvotes - post.downvotes %></span>
           </div>
 
           <form
@@ -65,13 +66,9 @@
               type="submit"
               class="vote-button <%= post.userVote == 0 ? 'active-vote' : '' %>"
             >
-              👎
+              -
             </button>
           </form>
-
-          <div class="vote-count-wrapper">
-            <span class="vote-count"><%= post.downvotes %></span>
-          </div>
           <% } %>
         </div>
 
@@ -81,13 +78,5 @@
       <p>No posts found in this sub.</p>
       <% } %>
     </main>
-
-    <style>
-      .active-vote {
-        background-color: #007f5f;
-        color: white;
-        font-weight: bold;
-      }
-    </style>
   </body>
 </html>

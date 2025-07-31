@@ -45,12 +45,12 @@
               type="submit"
               class="vote-button <%= vote.userVote == 1 ? 'active-vote' : '' %>"
             >
-              👍
+              +
             </button>
           </form>
 
           <div class="vote-count-wrapper">
-            <span class="vote-count"><%= vote.upVotes %></span>
+            <span class="vote-count"><%= vote.upVotes - vote.downVotes%></span>
           </div>
 
           <form
@@ -63,13 +63,9 @@
               type="submit"
               class="vote-button <%= vote.userVote == 0 ? 'active-vote' : '' %>"
             >
-              👎
+              -
             </button>
           </form>
-
-          <div class="vote-count-wrapper">
-            <span class="vote-count"><%= vote.downVotes %></span>
-          </div>
           <% } %>
         </div>
       </section>

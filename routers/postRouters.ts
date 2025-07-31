@@ -6,7 +6,7 @@ import { PrismaClient } from "@prisma/client";
 const db = new PrismaClient();
 
 router.get("/", async (req, res) => {
-  await renderPosts(req, res, 10);
+  await renderPosts(req, res, 20);
 });
 
 router.get("/create", ensureAuthenticated, (req, res) => {
@@ -21,8 +21,8 @@ router.post("/create", ensureAuthenticated, async (req, res) => {
   if (!existingSubgroup) {
     await db.subgroup.create({ data: { name: data.subgroup } });
   }
-  await db.post.create({ data });
-  res.redirect('/posts')
+  const newPost = await db.post.create({ data });
+  await renderIndividualPostPage(req, res, newPost?.id);
 });
 
 router.get("/show/:postid", ensureAuthenticated, async (req, res) => {
@@ -78,15 +78,15 @@ router.post("/delete/:postid", ensureAuthenticated, async (req, res) => {
     where: { id: postId },
   });
 
-  // const remainingPosts = await db.post.count({
-  //   where: { subgroup: subgroupName },
-  // });
+  const remainingPosts = await db.post.count({
+    where: { subgroup: subgroupName },
+  });
 
-  // if (remainingPosts === 0) {
-  //   await db.subgroup.delete({
-  //     where: { name: subgroupName },
-  //   });
-  // }
+  if (remainingPosts === 0) {
+    await db.subgroup.delete({
+      where: { name: subgroupName },
+    });
+  }
 
   res.redirect(`/subs/show/${subgroupName}`);
 });
@@ -174,9 +174,10 @@ async function decoratePost(postId: number) {
   return post;
 }
 
-async function renderIndividualPostPage(req: Request, res: Response) {
+async function renderIndividualPostPage(req: Request, res: Response, postid?: number) {
   const user = await req.user;
-  const post = await decoratePost(Number(req.params.postid));
+  const postId = postid ? postid : Number(req.params.postid)
+  const post = await decoratePost(postId);
   const vote = {
     upVotes: post?.votes.filter(v => v.value == 1).length,
     downVotes: post?.votes.filter(v => v.value == 0).length,
@@ -191,6 +192,7 @@ async function renderPosts(req: Request, res: Response, n: number, subName?: str
     take: n,
     include: {
       votes: true,
+      user: true,
     },
     where: {
       sub: {

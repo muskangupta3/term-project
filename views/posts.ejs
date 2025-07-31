@@ -60,8 +60,8 @@
             <% } %>
           </div>
 
-          <p><%= post.description %></p>
-
+          <p class="post-description"><%= post.description %></p>
+          <small>Created by :<%= post.user.uname %></small>
           <div class="vote-container">
             <% if (user) { %>
             <form
@@ -74,12 +74,14 @@
                 type="submit"
                 class="vote-button <%= post.userVote == 1 ? 'active-vote' : '' %>"
               >
-                👍
+                +
               </button>
             </form>
 
             <div class="vote-count-wrapper">
-              <span class="vote-count"><%= post.upvotes %></span>
+              <span class="vote-count"
+                ><%= post.upvotes - post.downvotes %></span
+              >
             </div>
 
             <form
@@ -92,13 +94,9 @@
                 type="submit"
                 class="vote-button <%= post.userVote == 0 ? 'active-vote' : '' %>"
               >
-                👎
+                -
               </button>
             </form>
-
-            <div class="vote-count-wrapper">
-              <span class="vote-count"><%= post.downvotes %></span>
-            </div>
             <% } %>
           </div>
 
@@ -111,23 +109,15 @@
         <% }) %>
       </div>
 
-      <div>
-        <a href="/subs/list">Subgroups</a>
-      </div>
+      <div class="homepage-actions">
+        <a href="/subs/list" class="subgroup-tag">Subgroups</a>
 
-      <% if (user) { %>
-      <div>
-        <a role="button" href="/posts/create">Create Post</a>
+        <% if (user) { %>
+        <a role="button" href="/posts/create" class="create-post-btn"
+          >Create Post</a
+        >
+        <% } %>
       </div>
-      <% } %>
     </main>
-
-    <style>
-      .active-vote {
-        background-color: #007f5f;
-        color: white;
-        font-weight: bold;
-      }
-    </style>
   </body>
 </html>

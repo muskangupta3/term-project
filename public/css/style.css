@@ -1,13 +1,64 @@
+/* --- General Reset & Base --- */
+body {
+  font-family: "Inter", "Segoe UI", sans-serif;
+  line-height: 1.6;
+  background-color: #fafafa;
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+a {
+  color: #0275d8;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1,
+h2,
+h3 {
+  color: #111;
+  margin-bottom: 0.75rem;
+}
+
+/* --- Auth Buttons (Top Nav) --- */
 .authOptions {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
+  margin-bottom: 2rem;
 }
+
+/* --- Post Container --- */
+.individualPost {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1.5rem;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+  transition: box-shadow 0.2s ease;
+  margin-bottom: 2rem;
+}
+
+.individualPost:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* --- Vote Section --- */
 .vote-container {
-  display: inline-flex;
-  flex-direction: row;
+  display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-top: 0.75rem;
 }
 
 .vote-form {
@@ -15,42 +66,225 @@
 }
 
 .vote-button {
-  width: 40px;
-  height: 40px;
-  font-size: 1.5rem;
+  width: 36px;
+  height: 36px;
+  font-size: 1.2rem;
   border: none;
   border-radius: 6px;
-  background-color: #e0e0e0;
+  background-color: #ececec;
   color: #333;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0;
   transition: background-color 0.2s ease;
-  vertical-align: middle;
 }
 
 .vote-button:hover {
-  background-color: #ccc;
+  background-color: #dcdcdc;
 }
 
 .vote-button.active-vote {
-  background-color: #0275d8;
-  color: white;
+  background-color: #007f5f;
+  color: #fff;
+}
+
+.vote-count-wrapper {
+  min-width: 24px;
+  text-align: center;
 }
 
 .vote-count {
   font-size: 1.3rem;
   font-weight: 600;
   color: #1c1c1c;
-  text-align: center;
-  min-width: 24px;
+  line-height: 1;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40px; /* same as button height */
-  line-height: 1;
   position: relative;
-  top: -9px;
+  top: -10px;
+}
+
+/* --- Buttons --- */
+button,
+a[role="button"] {
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  background-color: #0275d8;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover,
+a[role="button"]:hover {
+  background-color: #025aa5;
+}
+
+/* --- Forms --- */
+form label {
+  font-weight: 500;
+  margin-top: 1rem;
+  display: block;
+}
+
+form input[type="text"],
+form input[type="url"],
+form input[type="password"],
+form textarea {
+  width: 100%;
+  padding: 0.6rem;
+  margin-top: 0.25rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  font-size: 1rem;
+  transition: border-color 0.2s ease;
+}
+
+form input:focus,
+form textarea:focus {
+  border-color: #007f5f;
+  outline: none;
+}
+
+/* --- Comment Section --- */
+ul {
+  padding-left: 1.25rem;
+}
+
+li {
+  margin-bottom: 1rem;
+  background-color: #fdfdfd;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  border-left: 3px solid #007f5f;
+}
+
+/* --- Links --- */
+.back-link {
+  display: inline-block;
+  margin-top: 2rem;
+  color: #555;
+  font-size: 0.95rem;
+}
+
+/* Subgroup pill styling on homepage posts */
+.individualPost .subgroup-tag {
+  display: inline-block;
+  background-color: #007f5f;
+  color: white;
+  padding: 0.3rem 0.8rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0, 127, 95, 0.4);
+  user-select: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: default;
+  /* or pointer if clickable */
+  margin-top: 0.5rem;
+}
+
+.individualPost .subgroup-tag:hover {
+  background-color: #005940;
+  box-shadow: 0 4px 10px rgba(0, 89, 64, 0.6);
+}
+
+/* Homepage actions container for subgroup & create post */
+.homepage-actions {
+  display: flex;
+  gap: 1rem;
+  /* horizontal gap between buttons */
+  flex-wrap: wrap;
+  /* wrap on small screens */
+  margin-top: 2rem;
+  /* some top margin for breathing room */
+}
+
+/* Subgroup button */
+.subgroup-tag {
+  background-color: #e0f2f1;
+  color: #007f5f;
+  border: 1.5px solid #b2dfdb;
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0, 127, 95, 0.3);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.subgroup-tag:hover {
+  background-color: #b2dfdb;
+  color: #004d40;
+  box-shadow: 0 4px 10px rgba(0, 89, 64, 0.5);
+}
+
+/* Create post button */
+.create-post-btn {
+  background-color: #007f5f;
+  color: white !important;
+  font-weight: 700;
+  padding: 0.5rem 1.6rem;
+  border-radius: 20px;
+  box-shadow: 0 5px 15px rgba(0, 127, 95, 0.5);
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.create-post-btn:hover {
+  background-color: #005940;
+  box-shadow: 0 7px 20px rgba(0, 89, 64, 0.7);
+}
+
+/* --- Subs page styling scoped with class --- */
+/* Add class="subs-page" to <main> in subs.ejs */
+.subs-page ul {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 1rem;
+}
+
+.subs-page ul li {
+  margin-bottom: 0.6rem;
+}
+
+.subs-page ul li a {
+  color: #007f5f;
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.subs-page ul li a:hover {
+  background-color: #b2dfdb88;
+  /* light green transparent background */
+  color: #004d40;
+}
+
+.subs-page p.no-subs-message {
+  margin-top: 2rem;
+  font-style: italic;
+  color: #555;
+  text-align: left;
+}
+
+.individualPost .post-description {
+  font-style: italic;
+  color: #444;
+}
+
+.active-vote {
+  background-color: #007f5f;
+  color: white;
+  font-weight: bold;
 }

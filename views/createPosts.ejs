@@ -17,19 +17,49 @@
         <h1><%= post ? "Edit Post" : "Create Post" %></h1>
         <a role="button" href="/posts">← Home</a>
       </div>
-      <form action="<%= post ? '/posts/edit/' + post.id : '/posts/create' %>" method="POST">
-        
+      <form
+        action="<%= post ? '/posts/edit/' + post.id : '/posts/create' %>"
+        method="POST"
+      >
         <label for="title">Title</label>
-        <input type="text" id="title" name="title" placeholder="Enter post title" value="<%= post ? post.title : '' %>" required/>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          placeholder="Enter post title"
+          value="<%= post ? post.title : '' %>"
+          required
+        />
 
         <label for="link">Link (optional)</label>
-        <input type="url" id="link" name="link" placeholder="https://example.com" value="<%= post ? post.link : '' %>" />
+        <input
+          type="url"
+          id="link"
+          name="link"
+          placeholder="https://example.com"
+          value="<%= post ? post.link : '' %>"
+        />
 
         <label for="description">Description</label>
-        <textarea id="description" name="description" rows="5" placeholder="Write something about your post..." required><%= post ? post.description.trim() : '' %></textarea>
+        <textarea
+          id="description"
+          name="description"
+          rows="5"
+          placeholder="Write something about your post..."
+          required
+        >
+<%= post ? post.description.trim() : '' %></textarea
+        >
 
         <label for="subgroup">Subgroup</label>
-        <input type="text" id="subgroup" name="subgroup" placeholder="e.g., food, coding" value="<%= post ? post.subgroup.toLowerCase() : '' %>" required />
+        <input
+          type="text"
+          id="subgroup"
+          name="subgroup"
+          placeholder="e.g., food, coding"
+          value="<%= post ? post.subgroup : '' %>"
+          required
+        />
 
         <button type="submit"><%= post ? "Update Post" : "Post" %></button>
       </form>
