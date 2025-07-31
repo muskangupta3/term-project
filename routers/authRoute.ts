@@ -1,10 +1,13 @@
 import express from "express";
-import passport from "../middleware/passport";
+import passport from "../middleware/passport-db";
+// import passport from "../middleware/passport";
 const router = express.Router();
 const devMode = process.env.MODE === "dev"
 
 router.get("/login", async (req, res) => {
-  res.render("login",{devMode});
+  const messages = req.session.messages || [];
+  req.session.messages = [];
+  res.render("login", { devMode, messages });
 });
 
 router.post(
@@ -12,6 +15,7 @@ router.post(
   passport.authenticate("local", {
     successRedirect: "/posts",
     failureRedirect: "/auth/login",
+    failureMessage:true
   })
 );
 

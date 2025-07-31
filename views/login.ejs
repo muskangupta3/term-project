@@ -15,15 +15,20 @@
     <main>
       <div class="box">
         <h1>Login</h1>
+
         <% if (devMode) { %>
-        <p style="color: rgb(165, 36, 36)">
-          🤖 You are currently running in Dev mode. To make your life easier, we
-          autofill the username and password for you since sessions are wiped by
-          default whenever you save. Make sure to turn dev mode
-          <strong>OFF</strong>
-          before deploying to production by changing the .env file variable from
-          dev to prod. 🤖
-        </p>
+          <p style="color: rgb(165, 36, 36)">
+            🤖 You are currently running in Dev mode. To make your life easier, we
+            autofill the username and password for you since sessions are wiped by
+            default whenever you save. Make sure to turn dev mode
+            <strong>OFF</strong>
+            before deploying to production by changing the .env file variable from
+            dev to prod. 🤖
+          </p>
+        <% } %>
+
+        <% if (messages && messages.length > 0) { %>
+          <div style="color: red"><%= messages[0] %></div>
         <% } %>
 
         <form action="/auth/login" method="post">
@@ -32,14 +37,14 @@
             name="uname"
             id="uname"
             placeholder="Username"
-            value="<%= devMode ? 'alice': '' %>"
+            value="<%= devMode ? 'alice' : '' %>"
           />
           <input
             type="password"
             name="password"
             id="password"
             placeholder="Password"
-            value="<%= devMode ? 'alpha': '' %>"
+            value="<%= devMode ? 'alpha' : '' %>"
           />
 
           <button type="submit">Login</button>

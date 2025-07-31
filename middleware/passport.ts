@@ -24,7 +24,7 @@ const localLogin = new LocalStrategy(
 );
 
 // ⭐ DONE TODO: Passport Types
-passport.serializeUser(function (user: Express.User, done: (err: any, id?: string) => void)  {
+passport.serializeUser(function (user: Express.User, done: (err: any, id?: number) => void)  {
   console.log("serialize: " + user.id);
   done(null, user.id);
 });

@@ -1,19 +1,26 @@
 import express from "express";
 import session from "express-session";
-import passport from "./middleware/passport";
+// import passport from "./middleware/passport";
+import passport from "./middleware/passport-db";
 const PORT = process.env.PORT || 8000;
 
 const app = express();
 
 declare global {
   namespace Express {
-        interface User {
-          uname:string,
-          password:string,
-          id:string
-        }
+    interface User {
+      uname: string,
+      password: string,
+      id: number
     }
   }
+}
+
+declare module 'express-session' {
+  interface SessionData {
+    messages?: string[];
+  }
+}
 
 app.set("trust proxy", 1);
 app.set("view engine", "ejs");
