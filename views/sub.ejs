@@ -35,17 +35,47 @@
           >
         </div>
         <p><%= post.description %></p>
-
-        <% if (user) { %>
-        <div style="display: flex; align-items: center; gap: 0.5rem">
-          <div style="margin-top: 0.5rem">
-            <small
-              >👍 <%= post.upvotes || 0 %> &nbsp;&nbsp; 👎 <%= post.downvotes ||
-              0 %></small
+        <div class="vote-container">
+          <% if (user) { %>
+          <form
+            action="/posts/vote/<%= post.id %>?from=<%=subName%>"
+            method="POST"
+            class="vote-form"
+          >
+            <input type="hidden" name="setvoteto" value="1" />
+            <button
+              type="submit"
+              class="vote-button <%= post.userVote == 1 ? 'active-vote' : '' %>"
             >
+              👍
+            </button>
+          </form>
+
+          <div class="vote-count-wrapper">
+            <span class="vote-count"><%= post.upvotes %></span>
           </div>
+
+          <form
+            action="/posts/vote/<%= post.id %>?from=<%=subName%>"
+            method="POST"
+            class="vote-form"
+          >
+            <input type="hidden" name="setvoteto" value="0" />
+            <button
+              type="submit"
+              class="vote-button <%= post.userVote == 0 ? 'active-vote' : '' %>"
+            >
+              👎
+            </button>
+          </form>
+
+          <div class="vote-count-wrapper">
+            <span class="vote-count"><%= post.downvotes %></span>
+          </div>
+          <% } %>
         </div>
-        <% } %>
+
+        <% if (user) { %> <% } %>
       </div>
       <% }) %> <% } else { %>
       <p>No posts found in this sub.</p>

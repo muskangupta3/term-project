@@ -43,24 +43,63 @@
             >
 
             <% if (user && post.creator === user?.id) { %>
-            <a href="/posts/deleteconfirm/<%= post.id %>" style=" padding: 0.25rem 0.6rem;
-                    font-size: 0.8rem;
-                    background-color: #ffdddd;
-                    color: #a00;
-                    border: 1px solid #a00;
-                    border-radius: 4px;
-                    text-decoration: none;
-                    cursor: pointer;">Delete</a>
+            <a
+              href="/posts/deleteconfirm/<%= post.id %>"
+              style="
+                padding: 0.25rem 0.6rem;
+                font-size: 0.8rem;
+                background-color: #ffdddd;
+                color: #a00;
+                border: 1px solid #a00;
+                border-radius: 4px;
+                text-decoration: none;
+                cursor: pointer;
+              "
+              >Delete</a
+            >
             <% } %>
           </div>
 
           <p><%= post.description %></p>
 
-          <div style="margin-top: 0.5rem">
-            <small
-              >👍 <%= post.upvotes || 0 %> &nbsp;&nbsp; 👎 <%= post.downvotes ||
-              0 %></small
+          <div class="vote-container">
+            <% if (user) { %>
+            <form
+              action="/posts/vote/<%= post.id %>?from=posts"
+              method="POST"
+              class="vote-form"
             >
+              <input type="hidden" name="setvoteto" value="1" />
+              <button
+                type="submit"
+                class="vote-button <%= post.userVote == 1 ? 'active-vote' : '' %>"
+              >
+                👍
+              </button>
+            </form>
+
+            <div class="vote-count-wrapper">
+              <span class="vote-count"><%= post.upvotes %></span>
+            </div>
+
+            <form
+              action="/posts/vote/<%= post.id %>?from=posts"
+              method="POST"
+              class="vote-form"
+            >
+              <input type="hidden" name="setvoteto" value="0" />
+              <button
+                type="submit"
+                class="vote-button <%= post.userVote == 0 ? 'active-vote' : '' %>"
+              >
+                👎
+              </button>
+            </form>
+
+            <div class="vote-count-wrapper">
+              <span class="vote-count"><%= post.downvotes %></span>
+            </div>
+            <% } %>
           </div>
 
           <% if (user) { %>

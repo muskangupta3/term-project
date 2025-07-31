@@ -20,40 +20,61 @@
       <section>
         <h2><%= post.title %></h2>
         <% if (post.link) { %>
-          <p><strong>Link:</strong> 
-            <a href="<%= post.link %>" target="_blank"><%= post.link %></a>
-          </p>
+        <p>
+          <strong>Link:</strong>
+          <a href="<%= post.link %>" target="_blank"><%= post.link %></a>
+        </p>
         <% } %>
 
         <p><strong>Posted by:</strong> <%= post.user?.uname %></p>
-        <p><strong>Posted at:</strong> <%= new Date(post.timestamp).toLocaleDateString() %></p>
+        <p>
+          <strong>Posted at:</strong> <%= new
+          Date(post.timestamp).toLocaleDateString() %>
+        </p>
 
-                  <!-- VOTING SECTION -->
+        <!-- VOTING SECTION -->
         <div class="vote-container">
           <% if (user) { %>
-            <form action="/posts/vote/<%= post.id %>" method="POST" class="vote-form">
-              <input type="hidden" name="voteType" value="1" />
-              <button type="submit" class="vote-button <%= vote.userVote == 1 ? 'active-vote' : '' %>">👍 </button>
-            </form>
+          <form
+            action="/posts/vote/<%= post.id %>?from=individualPost"
+            method="POST"
+            class="vote-form"
+          >
+            <input type="hidden" name="setvoteto" value="1" />
+            <button
+              type="submit"
+              class="vote-button <%= vote.userVote == 1 ? 'active-vote' : '' %>"
+            >
+              👍
+            </button>
+          </form>
 
-            <div class="vote-count-wrapper">
-              <span class="vote-count"><%= vote.upVotes %></span>
-            </div>
+          <div class="vote-count-wrapper">
+            <span class="vote-count"><%= vote.upVotes %></span>
+          </div>
 
-            <form action="/posts/vote/<%= post.id %>" method="POST" class="vote-form">
-              <input type="hidden" name="voteType" value="0" />
-              <button type="submit" class="vote-button <%= vote.userVote == 0 ? 'active-vote' : '' %>">👎 </button>
-            </form>
+          <form
+            action="/posts/vote/<%= post.id %>?from=individualPost"
+            method="POST"
+            class="vote-form"
+          >
+            <input type="hidden" name="setvoteto" value="0" />
+            <button
+              type="submit"
+              class="vote-button <%= vote.userVote == 0 ? 'active-vote' : '' %>"
+            >
+              👎
+            </button>
+          </form>
 
-            <div class="vote-count-wrapper">
-              <span class="vote-count"><%= vote.downVotes %></span>
-            </div>
+          <div class="vote-count-wrapper">
+            <span class="vote-count"><%= vote.downVotes %></span>
+          </div>
           <% } %>
         </div>
-
       </section>
       <% if (user && post.user.id === user?.id) { %>
-        <a role="button" href="/posts/edit/<%= post.id %>">Edit</a>
+      <a role="button" href="/posts/edit/<%= post.id %>">Edit</a>
       <% } %>
       <hr />
 
@@ -61,43 +82,45 @@
       <section>
         <h3>Comments</h3>
         <% if (post.comments.length === 0) { %>
-          <p>No comments yet.</p>
+        <p>No comments yet.</p>
         <% } else { %>
-          <ul>
-            <% post.comments.forEach(comment => { %>
-              <li>
-                <p><%= comment.description %></p>
-                <small>
-                  — <%= comment.user?.uname %>,
-                  <%= new Date(comment.timestamp).toLocaleDateString() %>
-                  <% if (user && comment.creator === user?.id) { %>
-                    | <a href="/posts/comment-delete/<%= post.id %>/<%= comment.id %>">Delete</a>
-                  <% } %>
-                </small>
-              </li>
-            <% }); %>
-          </ul>
+        <ul>
+          <% post.comments.forEach(comment => { %>
+          <li>
+            <p><%= comment.description %></p>
+            <small>
+              — <%= comment.user?.uname %>, <%= new
+              Date(comment.timestamp).toLocaleDateString() %> <% if (user &&
+              comment.creator === user?.id) { %> |
+              <a href="/posts/comment-delete/<%= post.id %>/<%= comment.id %>"
+                >Delete</a
+              >
+              <% } %>
+            </small>
+          </li>
+          <% }); %>
+        </ul>
         <% } %>
       </section>
       <hr />
 
       <!-- COMMENT FORM -->
       <% if (user) { %>
-        <section>
-          <h3>Add a Comment</h3>
-          <form action="/posts/comment-create/<%= post.id %>" method="POST">
-            <input type="hidden" name="postId" value="<%= post.id %>" />
-            <label for="description">Comment</label>
-            <textarea
-              name="description"
-              id="description"
-              rows="3"
-              placeholder="Write your comment here..."
-              required
-            ></textarea>
-            <button type="submit">Submit</button>
-          </form>
-        </section>
+      <section>
+        <h3>Add a Comment</h3>
+        <form action="/posts/comment-create/<%= post.id %>" method="POST">
+          <input type="hidden" name="postId" value="<%= post.id %>" />
+          <label for="description">Comment</label>
+          <textarea
+            name="description"
+            id="description"
+            rows="3"
+            placeholder="Write your comment here..."
+            required
+          ></textarea>
+          <button type="submit">Submit</button>
+        </form>
+      </section>
       <% } %>
     </main>
   </body>
