@@ -7,21 +7,6 @@ const db = new PrismaClient();
 
 router.get("/", async (req, res) => {
   await renderPosts(req, res, 10);
-  // const user = await req.user;
-  // const posts = await db.post.findMany({
-  //   take: 10,
-  //   include: {
-  //     votes: true,
-  //   }
-  // });
-
-  // const postsWithVoteCounts = posts.map(post => {
-  //   const upvotes = post.votes.filter(v => v.value === 1).length;
-  //   const downvotes = post.votes.filter(v => v.value === 0).length;
-  //   const userVote = post?.votes.find(v => v.user_id === Number(user?.id))?.value
-  //   return { ...post, upvotes, downvotes, userVote };
-  // });
-  // res.render("posts", { posts: postsWithVoteCounts, user });
 });
 
 router.get("/create", ensureAuthenticated, (req, res) => {
@@ -36,7 +21,7 @@ router.post("/create", ensureAuthenticated, async (req, res) => {
   if (!existingSubgroup) {
     await db.subgroup.create({ data: { name: data.subgroup } });
   }
-  const createPost = await db.post.create({ data });
+  await db.post.create({ data });
   res.redirect('/posts')
 });
 
@@ -47,14 +32,13 @@ router.get("/show/:postid", ensureAuthenticated, async (req, res) => {
 
 router.get("/edit/:postid", ensureAuthenticated, async (req, res) => {
   // ⭐DONE TODO
-  const user = await req.user;
   const post = await decoratePost(Number(req.params.postid));
   res.render("createPosts", { post });
 });
 
 router.post("/edit/:postid", ensureAuthenticated, async (req, res) => {
   // ⭐DONE TODO
-  const editPost = await db.post.update({
+  await db.post.update({
     where: {
       id: Number(req.params.postid)
     },
